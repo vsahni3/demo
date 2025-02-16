@@ -30,24 +30,9 @@ load_dotenv()
 gemini_api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=gemini_api_key)
 def upload_video(video):
-    logging.debug('Starting video upload...')
-    try:
-        video_file = client.files.upload(file=BytesIO(video.read()), config={"mime_type": "video/mp4"})
-        logging.debug(f'Video uploaded. File state: {video_file.state.name}')
-        # Wait for the video to finish processing
-        while video_file.state.name == "PROCESSING":
-            logging.debug('Video is processing...')
-            time.sleep(5)  # Sleep for 5 seconds before checking again
-            video_file = client.files.get(name=video_file.name)
-            logging.debug(f'Checked video state: {video_file.state.name}')
-        if video_file.state.name != "READY":
-            logging.error(f'Video processing failed. Final state: {video_file.state.name}')
-            raise Exception('Video processing failed')
-        logging.debug('Video processing complete.')
-        return video_file
-    except Exception as e:
-        logging.error(f'Error during video upload or processing: {str(e)}')
-        raise
+    video_file = client.files.upload(file=BytesIO(video.read()), config={"mime_type": "video/mp4"})
+    video_file = client.files.get(name=video_file.name)
+    return video_file
 
 # Define a system prompt that sets the role and instructs the model to output JSON.
 system_prompt = (
