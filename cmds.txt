@@ -1,2 +1,1 @@
-python3 demo/app.py 
 curl -X GET http://localhost:5002/respond
