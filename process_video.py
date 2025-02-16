@@ -31,7 +31,7 @@ gemini_api_key = os.getenv("GEMINI_API_KEY")
 client = genai.Client(api_key=gemini_api_key)
 def upload_video(video):
     video_file = client.files.upload(file=BytesIO(video.read()), config={"mime_type": "video/mp4"})
-    # Wait for the, video to finish processing
+    # Wait for the video to finish processing
     video_file = client.files.get(name=video_file.name)
     return video_file
 
